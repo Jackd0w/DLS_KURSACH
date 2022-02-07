@@ -65,3 +65,38 @@ async def send_welcome(message: types.Message):
                         f"Пока я могу стилизировать изображение только под картины Моне, на подходе Ван Гог, Гоген, Ренуар, Матисс\n"
                         f"Управление осуществляется кнопками ниже. Если возникают вопросы - воспользуйтесь командой /help\n")
     
+
+@dp.message_handler(state=BotStates.waiting_select_style)
+async def style_select(message: types.Message):
+    """
+    Обработчик выбора стиля, вызывается при указании номера стиля
+    """
+    global user_style, style_names, n_styles, content_img
+    try:
+        user_style = int(message.text.strip())
+    except ValueError:
+        await message.reply("Некорректный ввод данных\n")
+        return
+    if 0 < user_style <= n_styles:
+        await message.answer(f"Ты выбрал стиль _{style_names[user_style - 1]}_.\n", parse_mode='Markdown')
+        await BotStates.waiting_processing.set()
+        await handle_go_processing(message)
+    else:
+        await message.reply("Некорректный ввод данных\n")
+        await message.answer("Cтиля с таким номером не существует.\n")
+
+
+@dp.message_handler(state=BotStates.waiting_photo, content_types=['photo'])
+async def handle_photo(message: types.Message):
+    """
+    Вызывается при отправке пользователем фотографии
+    """
+    global content_img, user_style
+    file_id = message.photo[-1].file_id
+    file_info = await bot.get_file(file_id)
+    content_img = await bot.download_file(file_info.file_path)
+    # content_img = Image.open(image_data)
+    # print(type(image_data))
+    await BotStates.waiting_select_style.set()
+    await message.answer("Фотография загружена.\n", reply_markup=set_keyboard(False))
+
