@@ -100,3 +100,57 @@ async def handle_photo(message: types.Message):
     await BotStates.waiting_select_style.set()
     await message.answer("Фотография загружена.\n", reply_markup=set_keyboard(False))
 
+
+@dp.message_handler(state=BotStates.waiting_processing)
+async def handle_go_processing(message):
+    """
+    Стилизация
+    """
+    global user_style, content_img
+    await message.answer("Я приступил к обработке фотографии.\n"
+                         f"Это может занять какое-то время.\n")
+    await message.answer("\U000023F3...\n")
+    output_image = await stylize(content_img)
+    user_style = 0
+    await bot.send_photo(chat_id=message.from_user.id, photo=output_image)
+    await message.answer("Готово!\n\nПопробуем еще?",
+                         reply_markup=set_keyboard(False))
+    await BotStates.waiting_select_style.set()
+
+
+
+async def on_startup(dp):
+    await bot.set_webhook(WEBHOOK_URL)
+    logging.info(f"Start webhook..\tWEBAPP_HOST-{WEBAPP_HOST}; WEBAPP_PORT-{WEBAPP_PORT};\n"
+                 f"WEBAPP_URL-{WEBHOOK_URL};")
+
+
+async def on_shutdown(dp):
+    logging.warning("Shutting down..")
+    await dp.storage.close()
+    await dp.storage.wait_closed()
+    logging.warning("Bye!")
+
+
+if __name__ == '__main__':
+
+    webhook_settings = False if environ.get('LOCAL_DEBUG') else True
+
+    if webhook_settings:
+        WEBHOOK_HOST = environ.get("WEBHOOK_HOST_ADDR")
+        WEBHOOK_PATH = f"webhook/{API_TOKEN}/"
+        WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
+        WEBAPP_HOST = environ.get("WEBAPP_HOST")
+        WEBAPP_PORT = environ.get("PORT")
+
+        start_webhook(
+            dispatcher=dp,
+            webhook_path=f"/{WEBHOOK_PATH}",
+            on_startup=on_startup,
+            on_shutdown=on_shutdown,
+            skip_updates=False,
+            host=WEBAPP_HOST,
+            port=WEBAPP_PORT,
+        )
+    else:
+        executor.start_polling(dp, skip_updates=True)
