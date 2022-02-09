@@ -1,0 +1,1 @@
+telegram бот для стилизации фотографий. В качестве алгоритма исользуется CycleGan, предобученная на картинах Моне. Алгоритм вщят из репозитория https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix.
