@@ -1,0 +1,7 @@
+torch==1.10.0
+torchvision==0.11.1
+Pillow==9.0.0
+aiogram==2.19
+numpy==1.20.1
+matplotlib==3.3.4
+pyTelegramBotAPI==4.4.0

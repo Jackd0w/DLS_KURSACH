@@ -5,7 +5,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.utils.executor import start_webhook
 from StyleGAN import CycleGANInferenceModel
-from utils import get_list_of_styles, get_examples
+from utils import get_list_of_styles
 from io import BytesIO
 import gc
 
@@ -17,7 +17,7 @@ API_TOKEN = environ.get("TOKEN")
 
 logging.basicConfig(level=logging.INFO)
 
-bot = Bot(token=API_TOKEN)
+bot = Bot(token=TOKEN)
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
 
@@ -120,7 +120,7 @@ async def handle_go_processing(message):
     await BotStates.waiting_select_style.set()
 
 
-
+'''Здесь реализованы функции для размещении на Heroku, webhook и тд. К сожа'''
 async def on_startup(dp):
     await bot.set_webhook(WEBHOOK_URL)
     logging.info(f"Start webhook..\tWEBAPP_HOST-{WEBAPP_HOST}; WEBAPP_PORT-{WEBAPP_PORT};\n"

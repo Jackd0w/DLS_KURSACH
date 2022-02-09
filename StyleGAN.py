@@ -2,7 +2,7 @@ import argparse
 from collections import OrderedDict
 from itertools import chain
 
-from .cycle_gan_official import data, models, options
+from cycle_gan_official import data, models, options
 from data import create_dataset
 from models.test_model import TestModel
 from options.test_options import TestOptions
