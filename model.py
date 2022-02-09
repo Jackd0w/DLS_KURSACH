@@ -194,9 +194,7 @@ class ContentLoss(nn.Module):
 
 
 class GramMatrix(nn.Module):
-    """Calculate the Gramian matrix separately for each sample in the batch
-    and normalize values by dividing by a number of elements in the sample.
-    """
+    """Высчитываем матрицу грамма отдельно для каждого батча и нормализуем значения деля их на количетсво элементов в образце"""
 
     def forward(self, input):
         batch_size, f_map_num, h, w = input.size()
@@ -365,16 +363,7 @@ class StyleTransferModel:
     @staticmethod
     def _fit_style_img_size_to_content_img_size(
             content, style, *, way_to_fit="none", method=Image.BICUBIC):
-        """Transform style image to fit content image size.
-        Just resizes ("resize") style image to content image size;
-        scales ("scale_then_crop") image first to match one of sides of
-        content image, then crops style image to match a second side of
-        content image; does nothing ("none").
-        Parameters:
-            content (torch.Tensor) — content image
-            style (torch.Tensor) — style image
-            way_to_fit (str) — "scale_then_crop", "resize", or "none"
-        """
+        """Трансформирует изображение со стилем, для того, чтобы оно совпадало по размерности с присланным изображением."""
         if way_to_fit == "none":
             return style
         content_w, content_h = V._get_image_size(content)
