@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "./pytorch-CycleGAN-and-pix2pix"
+    ]
+}

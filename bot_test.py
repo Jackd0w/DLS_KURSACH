@@ -4,8 +4,10 @@ from aiogram import Bot, Dispatcher, executor, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.utils.executor import start_webhook
+from StyleGAN import CycleGANInferenceModel
 from utils import get_list_of_styles, get_examples
 from io import BytesIO
+import gc
 
 from config import TOKEN
 
@@ -44,7 +46,7 @@ def set_keyboard(condition=True):
 
 async def stylize(user_image):
     global user_style
-    model = ModelStyle(user_style)
+    model = CycleGANInferenceModel(user_style)
     model.load_model()
     output = model.run(user_image)
     del model

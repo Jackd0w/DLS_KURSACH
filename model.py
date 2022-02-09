@@ -221,13 +221,10 @@ class StyleLoss(nn.Module):
 
 
 class StyleTransferModel:
-    """Implements the Neural-Style algorithm (https://arxiv.org/abs/1508.06576)
-    developed by Leon A. Gatys, Alexander S. Ecker and Matthias Bethge.
-    Some part of the algorithm core implementation is adopted from Alexis Jacq
+    """Моя имплементация алгоритма нейронной передкачи стиля(https://arxiv.org/abs/1508.06576)
+    Некоторые части алгоритма взяты взяты из работы Alexis Jacq
     (https://github.com/alexis-jacq/Pytorch-Tutorials/blob/d464a69f2e0e892ceed2a1a2cada12a52c180bc5/Neural_Style.py)
-    But some part was changed: for example, gram matrix is due to
-    it is incorrectly calculated (not per the image in the batch,
-    but per the whole batch).
+    Но изменен подсчет матрицы Грамма
     """
 
     def __init__(self, options):
